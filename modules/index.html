@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Monaco Editor</title>
+    <style>
+      /* Optional: add some styling to the editor */
+      #editor {
+        height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Add the editor container -->
+    <div id="editor"></div>
+
+    <!-- Load the editor scripts -->
+    <script src="https://unpkg.com/monaco-editor@0.25.2/min/vs/loader.js"></script>
+    {% comment %} <script src="./bundle.js"></script> {% endcomment %}
+
+    <script>
+      // Initialize the editor
+      require.config({ paths: { 'vs': './node_modules/monaco-editor/min/vs' }});
+      require(['vs/editor/editor.main'], function() {
+        var editor = monaco.editor.create(document.getElementById('editor'), {
+          value: 'console.log("Hello, world!")',
+          language: 'javascript',
+          theme: 'vs-dark'
+        });
+      });
+    </script>
+  </body>
+</html>

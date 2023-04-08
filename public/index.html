@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real-time File Editor</title>
+</head>
+<body>
+  <h1>Real-time File Editor</h1>
+  <form id="file-form">
+    <label for="filename">File name:</label>
+    <input type="text" id="filename" name="filename">
+    <input type="submit" value="Load file">
+  </form>
+  <textarea id="file-content" rows="30" cols="200"></textarea>
+  <button id="save-button">Save file</button>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const fileForm = document.getElementById('file-form');
+    const filenameInput = document.getElementById('filename');
+    const fileContent = document.getElementById('file-content');
+    const saveButton = document.getElementById('save-button');
+
+    fileForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const filename = filenameInput.value;
+      socket.emit('request-file', filename);
+    });
+
+    socket.on('file-content', (data) => {
+      fileContent.value = data;
+    });
+
+    saveButton.addEventListener('click', () => {
+      const filename = filenameInput.value;
+      const content = fileContent.value;
+      socket.emit('save-file', { filename, content });
+    });
+
+    socket.on('file-saved', () => {
+      alert('File saved successfully');
+    });
+
+    socket.on('file-error', (message) => {
+      alert(`Error: ${message}`);
+    });
+  </script>
+</body>
+</html>
