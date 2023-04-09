@@ -17,7 +17,7 @@
       }
     </style>
     <script>
-      if(window.URL)
+      // if(window.URL)
     </script>
   </head>
   <body>
@@ -37,7 +37,6 @@
     <script>
       require.config({ paths: { vs: "../node_modules/monaco-editor/min/vs" } });
 
-     
     </script>
     <script>
         var editor;
@@ -81,9 +80,9 @@
         );
       });
       
-      iframe.src = "http://localhost:3000/" + filenameInput.value;
+      iframe.src = "/" + filenameInput.value;
       document.getElementById("webview").append(iframe);
-      document.getElementsByClassName("monaco-editor")[0].style.width = "100%";
+      // document.getElementsByClassName("monaco-editor")[0].style.width = "100%";
       });
 
       saveButton.addEventListener("click", () => {
@@ -95,7 +94,7 @@
       socket.on("file-saved", () => {
         
         alert("File saved successfully");
-        iframe.src = "http://localhost:3000/" + filenameInput.value;
+        iframe.src = "/" + filenameInput.value;
           
         //   iframe.contentWindow.location.reload();
 
