@@ -26,6 +26,7 @@ app.get('/editor', function (req, res) {
 app.get('/level1', function (req, res) {
   res.render('pages/level1');
 });
+
 function copyAllFiles(sourceFolder, destinationFolder) {
   // Create destination folder
   try {
