@@ -22,11 +22,20 @@ app.get("/", (req, res) => {
 app.get('/editor', function (req, res) {
   res.sendFile(path.join(__dirname, 'editor/index.html'));
 }); 
+// app.get("/editor/:id", function (req, res) {
+//   if (req.params.id){
+//     res.render('editor',{title: req.params.id});
+//   }
+// }); 
 
 app.get('/level1', function (req, res) {
-  res.render('pages/level1');
+  res.render('pages/level1', {completed: true});
 });
-
+app.get("/level1/:id", function (req, res) {
+  if (req.params.id) {
+    res.render("pages/level1", { completed: false });
+  }
+});
 function copyAllFiles(sourceFolder, destinationFolder) {
   // Create destination folder
   try {

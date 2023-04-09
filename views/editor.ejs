@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Real-time File Editor</title>
+    <style>
+        .monaco-editor {
+            width: 100%;
+        }
+
+        /* Optional: add some styling to the editor */
+        #file-content {
+            height: 500px;
+            width: 100%;
+        }
+
+        .webview {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+    <script>
+        if (window.URL)
+    </script>
+</head>
+
+<body>
+    <h1>Real-time File Editor</h1>
+    <form id="file-form">
+        <label for="filename">File name:</label>
+        <input type="text" id="filename" name="filename" />
+        <input type="submit" value="Load file" />
+    </form>
+    <button id="save-button">Save file</button>
+    <div style="display: grid; grid-template-columns: auto auto;">
+        <div id="file-content"></div>
+        <div id="webview"></div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/monaco-editor@0.25.2/min/vs/loader.js"></script>
+    <script>
+            require.config({ paths: { vs: "../node_modules/monaco-editor/min/vs" } });
+
+
+    </script>
+    <script>
+        var editor;
+        const socket = io();
+        var iframe = document.createElement("iframe");
+        iframe.classList.add("webview");
+        const fileForm = document.getElementById("file-form");
+        const filenameInput =          <%= title %>;
+        const fileContent = document.getElementById("file-content");
+        const saveButton = document.getElementById("save-button");
+
+        fileForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const filename = filenameInput.value;
+            socket.emit("request-file", filename);
+        });
+
+        socket.on("file-content", (data) => {
+            fileContent.value = data;
+            var language = "javascript";
+            if (filenameInput.value.includes(".html")) {
+                language = "html";
+                console.log("html file");
+            }
+            require(["vs/editor/editor.main"], function () {
+                editor = monaco.editor.create(
+                    document.getElementById("file-content"),
+                    {
+                        dimension: {
+                            width: devicePixelRatio * 600,
+                            height: 600
+                        },
+                        options: {
+                            automaticLayout: true,
+                        },
+
+                        value: data,
+                        language: language,
+                        theme: "vs-dark",
+                    }
+                );
+            });
+
+            iframe.src = "/level1/header" + filenameInput.value;
+            document.getElementById("webview").append(iframe);
+            document.getElementsByClassName("monaco-editor")[0].style.width = "100%";
+        });
+
+        saveButton.addEventListener("click", () => {
+            const filename = filenameInput.value;
+            const content = editor.getValue();
+            socket.emit("save-file", { filename, content });
+        });
+
+        socket.on("file-saved", () => {
+
+            alert("File saved successfully");
+            iframe.src = "http://localhost:3000/" + filenameInput.value;
+
+            //   iframe.contentWindow.location.reload();
+
+        });
+
+        socket.on("file-error", (message) => {
+            alert(`Error: ${message}`);
+        });
+    </script>
+</body>
+
+</html>

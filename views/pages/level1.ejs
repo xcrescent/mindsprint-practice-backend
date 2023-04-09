@@ -4,14 +4,25 @@
     <%- include('../partials/default/level1/head'); %>
 </head>
 <body>
-    <!-- <%- include('../partials/default/level1/header'); %> -->
-    <main>
-        <!-- <%- include('../partials/default/level1/hero'); %> -->
-        <!-- <%- include('../partials/default/level1/services'); %> -->
-        <!-- <%- include('../partials/default/level1/about'); %> -->
-    </main>
+    <% if (completed) { %>
+        <%- include('../partials/default/level1/header'); %>
+        <main>
+            <%- include('../partials/default/level1/hero'); %>
+            <%- include('../partials/default/level1/services'); %>
+            <%- include('../partials/default/level1/about'); %>
+        </main>
         <%- include('../partials/default/level1/footer'); %>
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    
+        <% } else { %>
+            <%- include('../partials/errors/level1/header'); %>
+                <main>
+                    <%- include('../partials/errors/level1/hero'); %>
+                        <%- include('../partials/errors/level1/services'); %>
+                            <%- include('../partials/errors/level1/about'); %>
+                </main>
+                <%- include('../partials/errors/level1/footer'); %>
+            <% } %>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script src="/public/default/level1/index.js"></script>
     <script>
         window.localStorage.setItem('username')
